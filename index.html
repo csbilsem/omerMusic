@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Çokgensel Silindir — Sayılarla Müzik Kutusu</title>
+  <meta name="description" content="Üçgensel, karesel, beşgensel sayıları bir müzik kutusu silindirine çivi olarak diz ve dinle.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Çokgensel <em>Silindir</em></h1>
+    <p class="lead">Üçgensel, karesel, beşgensel… sayıları bir müzik kutusu silindirine çivi olarak diz, döndür ve dinle.</p>
+  </header>
+
+  <main class="layout">
+    <section class="stage card">
+      <canvas id="drum" aria-label="Müzik kutusu silindiri"></canvas>
+      <div class="transport">
+        <button id="play" class="primary">▶ Çal</button>
+        <label class="tempo">Tempo
+          <input type="range" id="tempo" min="40" max="200" value="96">
+          <output id="tempoOut">96</output>
+        </label>
+        <button id="share">🔗 Bağlantıyı kopyala</button>
+        <button id="midi">⬇ MIDI indir</button>
+        <button id="clearEdits">Elle eklenenleri sil</button>
+      </div>
+      <p class="hint">Silindire <b>tıkla</b>: çivi ekle / kaldır. Dururken <b>yukarı-aşağı sürükle</b>: silindiri döndür.</p>
+    </section>
+
+    <aside class="panel card">
+      <h2>Çokgen katmanları</h2>
+      <div id="layers" class="layers"></div>
+
+      <h2>Yerleşim</h2>
+      <div class="grid2">
+        <label class="wide">Eşleme
+          <select id="mode">
+            <option value="residue">Kalıntı melodisi</option>
+            <option value="helix">Sarmal sayı doğrusu</option>
+          </select>
+        </label>
+        <label class="wide">Gam
+          <select id="scale"></select>
+        </label>
+        <label>Çevre (adım)
+          <select id="steps">
+            <option>16</option><option>24</option><option selected>32</option><option>48</option><option>64</option>
+          </select>
+        </label>
+        <label>Başlangıç n
+          <input type="number" id="start" min="1" max="999" value="1">
+        </label>
+        <label>Kök nota
+          <select id="root"></select>
+        </label>
+        <label>Oktav
+          <select id="octaves">
+            <option>1</option><option selected>2</option><option>3</option>
+          </select>
+        </label>
+      </div>
+      <p id="modeHelp" class="small"></p>
+
+      <h2>Son vurulan sayı</h2>
+      <canvas id="poly" width="300" height="240"></canvas>
+      <p id="polyLabel" class="mono"></p>
+    </aside>
+
+    <section class="info card">
+      <h2>Diziler</h2>
+      <div id="seqTable" class="seq"></div>
+
+      <h2>Nasıl çalışır?</h2>
+      <div class="explain">
+        <p><b>Çokgensel sayı:</b> <span class="mono">P(s, n) = ((s − 2)·n² − (s − 4)·n) / 2</span>.
+          s kenar sayısı, n kaçıncı terim olduğu. s = 3 üçgensel (1, 3, 6, 10…), s = 4 karesel (1, 4, 9, 16…), s = 5 beşgensel (1, 5, 12, 22…).</p>
+        <p><b>Silindir:</b> Çevre boyunca <i>adımlar</i> (zaman), eksen boyunca <i>notalar</i> (seçilen gamın perdeleri) dizilir. Silindir dönerken öndeki tarağa değen çiviler çalar.</p>
+        <p><b>Kalıntı melodisi:</b> Her adım t için n = başlangıç + t alınır, çivi <span class="mono">P(s,n) mod nota_sayısı</span> satırına konur. Çokgensel sayıların kalıntıları periyodik olduğu için kendini tekrar eden motifler çıkar.</p>
+        <p><b>Sarmal sayı doğrusu:</b> Tam sayılar silindirin etrafına sarmal biçimde sarılır: k sayısı <span class="mono">k mod çevre</span> sütununa ve <span class="mono">⌊k / çevre⌋</span> satırına düşer. Çokgensel sayıların düştüğü yerler çivi olur — Ulam sarmalının silindir üzerindeki müzikal hali.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Çokgensel Silindir · Web Audio ile tarayıcıda çalışır, kurulum gerektirmez.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
